@@ -3,8 +3,8 @@
 const inquirer = require('inquirer');
 const fs = require('fs');
 const generateMarkdown = require('./utils/generateMarkdown');
-const renderLicenseBadge = require('./utils/generateMarkdown');
-const renderLicenseLink = require('./utils/generateMarkdown');
+// const renderLicenseBadge = require('./utils/generateMarkdown');
+// const renderLicenseLink = require('./utils/generateMarkdown');
 // ! TODO: Create an array of questions for user input
 const questions = [
     'What is the title of your project?',
@@ -86,8 +86,6 @@ const writeToFile = (fileName, data) => {
 // TODO: Create a function to initialize app
 const init = () => {
     promptUser()
-      // Use writeFile method imported from fs.promises to use promises instead of
-      // a callback function
       .then((answers) => writeToFile('README.md', generateMarkdown(answers)))
       .then(() => console.log('Successfully wrote to README.md'))
       .catch((err) => console.error(err));
