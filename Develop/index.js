@@ -2,16 +2,19 @@
 // ! TODO: Include packages needed for this application
 const inquirer = require('inquirer');
 const fs = require('fs');
+const generateMarkdown = require('./utils/generateMarkdown');
+const renderLicenseBadge = require('./utils/generateMarkdown');
+const renderLicenseLink = require('./utils/generateMarkdown');
 // ! TODO: Create an array of questions for user input
 const questions = [
     'What is the title of your project?',
-    'What is the description of your project?',
+    'Enter a description for your project:',
     'What are the installation instructions?',
-    'What is the usage information?',
+    'Enter the usage information:',
 // Choose a license from a list of options
-    'Choose a license for your project:',
-    'What are the contribution guidelines?',
-    'What are the test instructions?',
+    'Choose a license for your application:',
+    'How can others contribute?',
+    'Enter test instructions:',
 // GitHub Username and Email address are added to the Questions section
     // with instructions on how to reach you with additional questions
     'What is your GitHub username?',
@@ -24,64 +27,71 @@ const promptUser = () => {
       {
         type: 'input',
         name: 'title',
-        message: 'What is your name?',
+        message: 'What is the title of your project?',
       },
       {
         type: 'input',
         name: 'description',
-        message: 'Where are you from?',
+        message: 'Enter a description for your project:',
       },
       {
         type: 'input',
         name: 'installation',
-        message: 'What is your favorite hobby?',
+        message: 'What are the installation instructions?',
       },
       {
         type: 'input',
         name: 'usage',
-        message: 'What is your favorite food?',
+        message: 'Enter the usage information:',
       },
       {
         type: 'list',
         name: 'license',
-        message: 'Enter your LinkedIn URL.',
+        message: 'Choose a license for your application:',
+        choices: ['MIT', 'Apache 2.0', 'GNU GPLv3', 'ISC', 'None']
       },
       {
         type: 'input',
         name: 'contributing',
-        message: 'Enter your GitHub Username',
+        message: 'How can others contribute?',
       },
       {
         type: 'input',
         name: 'tests',
-        message: 'Enter your LinkedIn URL.',
+        message: 'Enter test instructions:',
       },
       {
         type: 'input',
         name: 'github',
-        message: 'Enter your LinkedIn URL.',
+        message: 'Enter your GitHub username:',
       },
       {
         type: 'input',
         name: 'email',
-        message: 'Enter your LinkedIn URL.',
-      },
+        message: 'Enter your email address:',
+      }
     ]);
   };
-
 // TODO: Create a function to write README file
-function writeToFile(fileName, data) {
-    fs.writeFile(fileName, data, (err) => {
+const writeToFile = (fileName, data) => {
+    fs.appendFile(fileName, data, (err) => {
         if (err) {
-          console.error(err);
-          return;
+            console.error(err);
+            return;
         }
         console.log(`File ${fileName} has been saved.`);
-      });
+    });
 };
 
 // TODO: Create a function to initialize app
-function init() {};
+const init = () => {
+    promptUser()
+      // Use writeFile method imported from fs.promises to use promises instead of
+      // a callback function
+      .then((answers) => writeToFile('README.md', generateMarkdown(answers)))
+      .then(() => console.log('Successfully wrote to README.md'))
+      .catch((err) => console.error(err));
+  };
 
 // Function call to initialize app
 init();
